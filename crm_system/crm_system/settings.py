@@ -1,4 +1,5 @@
 from pathlib import Path
+import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -6,7 +7,7 @@ SECRET_KEY = 'django-insecure-r=4k##3ewk5+_yeeu672h6z6u=hg3y-v@h)%bo#%5et-%b62v9
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # ✅ APPS
@@ -25,6 +26,7 @@ INSTALLED_APPS = [
 # ✅ MIDDLEWARE
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # ✅ ADDED FOR STATIC FILES
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -37,16 +39,12 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'crm_system.urls'
 
 
-# ✅ TEMPLATES (IMPORTANT FIX)
+# ✅ TEMPLATES
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-
-        # 🔥 GLOBAL TEMPLATES FOLDER SUPPORT
         'DIRS': [BASE_DIR / 'templates'],
-
         'APP_DIRS': True,
-
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.request',
@@ -86,12 +84,13 @@ USE_I18N = True
 USE_TZ = True
 
 
-# ✅ STATIC FILES (FIXED)
+# ✅ STATIC FILES
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
-# ✅ LOGIN SYSTEM (VERY IMPORTANT FOR CRM)
+# ✅ LOGIN SYSTEM
 LOGIN_URL = '/admin/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/admin/login/'
