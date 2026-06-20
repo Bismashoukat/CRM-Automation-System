@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <title>CRM Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root[data-theme="light"] {
+            --bg: #f0f2f5;
+            --card-bg: #ffffff;
+            --text: #1a1a2e;
+            --text-muted: #6c757d;
+            --border: #e0e0e0;
+            --table-hover: #f8f9ff;
+            --sidebar-bg: #1a1a2e;
+            --header-bg: #ffffff;
+            --input-bg: #ffffff;
+        }
+        :root[data-theme="dark"] {
+            --bg: #0f0f1a;
+            --card-bg: #1e1e2e;
+            --text: #e0e0f0;
+            --text-muted: #9090a0;
+            --border: #2e2e4e;
+            --table-hover: #252538;
+            --sidebar-bg: #0a0a15;
+            --header-bg: #1e1e2e;
+            --input-bg: #252538;
+        }
+
+        * { transition: background 0.3s, color 0.2s, border-color 0.2s; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Segoe UI', sans-serif;
+            min-height: 100vh;
+        }
+
+        /* TOPBAR */
+        .topbar {
+            background: var(--header-bg);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .topbar-brand {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #4f46e5;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .topbar-brand i { font-size: 1.4rem; }
+
+        /* MAIN LAYOUT */
+        .main-content { padding: 28px; max-width: 1400px; margin: 0 auto; }
+
+        /* PAGE HEADER */
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .page-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--text);
+            margin: 0;
+        }
+        .page-title span { color: #4f46e5; }
+
+        /* STAT CARDS */
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px 24px;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+        }
+        .stat-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        .stat-icon.total   { background: #ede9fe; color: #4f46e5; }
+        .stat-icon.new     { background: #fef3c7; color: #d97706; }
+        .stat-icon.contact { background: #dbeafe; color: #2563eb; }
+        .stat-icon.progress{ background: #fce7f3; color: #db2777; }
+        .stat-icon.convert { background: #d1fae5; color: #059669; }
+        .stat-label { font-size: 0.82rem; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+        .stat-value { font-size: 1.8rem; font-weight: 700; color: var(--text); line-height: 1; }
+
+        /* CONTROLS BAR */
+        .controls-bar {
+            background: var(--card-bg);
+            border-radius: 14px;
+            padding: 16px 20px;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .search-wrap { position: relative; flex: 1; min-width: 200px; }
+        .search-wrap i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+        .search-input {
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 10px;
+            padding: 9px 12px 9px 36px;
+            width: 100%;
+            font-size: 0.9rem;
+            outline: none;
+        }
+        .search-input:focus { border-color: #4f46e5; box-shadow: 0 0 0 3px rgba(79,70,229,0.1); }
+
+        /* FILTER BUTTONS */
+        .filter-group { display: flex; gap: 6px; flex-wrap: wrap; }
+        .filter-btn {
+            padding: 7px 16px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border: 1.5px solid var(--border);
+            background: transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .filter-btn:hover, .filter-btn.active {
+            border-color: #4f46e5;
+            background: #4f46e5;
+            color: white;
+        }
+        .filter-btn.f-new:hover, .filter-btn.f-new.active     { background: #d97706; border-color: #d97706; }
+        .filter-btn.f-contact:hover, .filter-btn.f-contact.active { background: #2563eb; border-color: #2563eb; }
+        .filter-btn.f-progress:hover, .filter-btn.f-progress.active { background: #db2777; border-color: #db2777; }
+        .filter-btn.f-convert:hover, .filter-btn.f-convert.active { background: #059669; border-color: #059669; }
+
+        /* TABLE */
+        .table-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .table-head-row th {
+            background: #1a1a2e;
+            color: #a0a0c0;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            font-weight: 600;
+            padding: 14px 18px;
+            border: none;
+        }
+        [data-theme="dark"] .table-head-row th { background: #0a0a15; }
+
+        .lead-row td {
+            padding: 14px 18px;
+            vertical-align: middle;
+            border-color: var(--border);
+            color: var(--text);
+            font-size: 0.9rem;
+            background: var(--card-bg);
+        }
+        .lead-row:hover td { background: var(--table-hover); cursor: pointer; }
+
+        /* AVATAR */
+        .avatar {
+            width: 36px; height: 36px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-right: 8px;
+        }
+
+        /* STATUS BADGE */
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .badge-new        { background: #fef3c7; color: #b45309; }
+        .badge-contacted  { background: #dbeafe; color: #1d4ed8; }
+        .badge-in_progress{ background: #fce7f3; color: #9d174d; }
+        .badge-converted  { background: #d1fae5; color: #065f46; }
+
+        /* ACTION BUTTONS */
+        .action-btn {
+            width: 32px; height: 32px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-muted);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.15s;
+        }
+        .action-btn:hover { color: white; border-color: transparent; }
+        .action-btn.edit:hover     { background: #4f46e5; }
+        .action-btn.status:hover   { background: #059669; }
+        .action-btn.delete:hover   { background: #dc2626; }
+
+        /* PAGINATION */
+        .pagination-wrap { padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+        .page-info { font-size: 0.85rem; color: var(--text-muted); }
+        .page-btn {
+            padding: 7px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--card-bg);
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .page-btn:hover { background: #4f46e5; color: white; border-color: #4f46e5; }
+
+        /* EXPORT BTN */
+        .export-btn {
+            padding: 8px 16px;
+            border-radius: 10px;
+            background: #4f46e5;
+            color: white;
+            border: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+        .export-btn:hover { background: #4338ca; color: white; }
+
+        /* ADD LEAD BTN */
+        .add-btn {
+            padding: 9px 20px;
+            border-radius: 10px;
+            background: #4f46e5;
+            color: white;
+            border: none;
+            font-size: 0.88rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+        .add-btn:hover { background: #4338ca; color: white; }
+
+        /* DARK MODE TOGGLE */
+        .theme-btn {
+            width: 38px; height: 38px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--card-bg);
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+
+        /* EMPTY STATE */
+        .empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
+        .empty-state i { font-size: 3rem; opacity: 0.3; margin-bottom: 12px; display: block; }
+
+        /* MODAL */
+        .modal-content {
+            background: var(--card-bg) !important;
+            color: var(--text) !important;
+            border: 1px solid var(--border) !important;
+            border-radius: 16px !important;
+        }
+        .modal-header { border-color: var(--border) !important; }
+        .detail-row { display: flex; padding: 10px 0; border-bottom: 1px solid var(--border); }
+        .detail-label { width: 120px; font-weight: 600; color: var(--text-muted); font-size: 0.85rem; flex-shrink: 0; }
+        .detail-value { color: var(--text); font-size: 0.9rem; }
+    </style>
+</head>
+
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+    <div class="topbar-brand">
+        <i class="bi bi-diagram-3-fill"></i>
+        CRM System
+    </div>
+    <div class="d-flex align-items-center gap-2">
+        <a href="{% url 'contact' %}" class="add-btn">
+            <i class="bi bi-plus-lg"></i> Add Lead
+        </a>
+        <button class="theme-btn" onclick="toggleTheme()" title="Toggle dark mode">
+            <i class="bi bi-moon-fill" id="theme-icon"></i>
+        </button>
+    </div>
+</div>
+
+<!-- MAIN -->
+<div class="main-content">
+
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+        <h1 class="page-title">Lead <span>Dashboard</span></h1>
+        <button class="export-btn" onclick="exportCSV()">
+            <i class="bi bi-download"></i> Export CSV
+        </button>
+    </div>
+
+    <!-- STAT CARDS -->
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3 col-lg">
+            <div class="stat-card">
+                <div class="stat-icon total"><i class="bi bi-people-fill"></i></div>
+                <div>
+                    <div class="stat-label">Total Leads</div>
+                    <div class="stat-value">{{ total_leads }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3 col-lg">
+            <div class="stat-card">
+                <div class="stat-icon new"><i class="bi bi-star-fill"></i></div>
+                <div>
+                    <div class="stat-label">New</div>
+                    <div class="stat-value">{{ new_leads }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3 col-lg">
+            <div class="stat-card">
+                <div class="stat-icon contact"><i class="bi bi-chat-dots-fill"></i></div>
+                <div>
+                    <div class="stat-label">Contacted</div>
+                    <div class="stat-value">{{ contacted }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3 col-lg">
+            <div class="stat-card">
+                <div class="stat-icon progress"><i class="bi bi-hourglass-split"></i></div>
+                <div>
+                    <div class="stat-label">In Progress</div>
+                    <div class="stat-value">{{ in_progress }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3 col-lg">
+            <div class="stat-card">
+                <div class="stat-icon convert"><i class="bi bi-trophy-fill"></i></div>
+                <div>
+                    <div class="stat-label">Converted</div>
+                    <div class="stat-value">{{ converted }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTROLS -->
+    <div class="controls-bar">
+        <form method="GET" class="search-wrap">
+            <i class="bi bi-search"></i>
+            <input type="text" name="search" value="{{ search_query }}"
+                   class="search-input" placeholder="Search by name, email, company...">
+        </form>
+        <div class="filter-group">
+            <a href="?status=all"         class="filter-btn {% if status_filter == 'all' %}active{% endif %}">
+                <i class="bi bi-grid"></i> All
+            </a>
+            <a href="?status=new"         class="filter-btn f-new {% if status_filter == 'new' %}active{% endif %}">
+                <i class="bi bi-star"></i> New
+            </a>
+            <a href="?status=contacted"   class="filter-btn f-contact {% if status_filter == 'contacted' %}active{% endif %}">
+                <i class="bi bi-chat"></i> Contacted
+            </a>
+            <a href="?status=progress" class="filter-btn f-progress {% if status_filter == 'progress' %}active{% endif %}">
+                <i class="bi bi-hourglass"></i> In Progress
+            </a>
+            <a href="?status=converted"   class="filter-btn f-convert {% if status_filter == 'converted' %}active{% endif %}">
+                <i class="bi bi-trophy"></i> Converted
+            </a>
+        </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-card">
+        <table class="table mb-0" id="leadsTable">
+            <thead>
+                <tr class="table-head-row">
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Company</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for lead in leads %}
+                <tr class="lead-row" onclick="showDetail({{ lead.id }}, '{{ lead.name }}', '{{ lead.email }}', '{{ lead.phone }}', '{{ lead.company }}', '{{ lead.message }}', '{{ lead.status }}')">
+                    <td>
+                        <span class="avatar">{{ lead.name|first|upper }}</span>
+                        {{ lead.name }}
+                    </td>
+                    <td>{{ lead.email }}</td>
+                    <td>{{ lead.phone }}</td>
+                    <td>{{ lead.company }}</td>
+                    <td>
+                        <span class="status-badge badge-{{ lead.status }}">
+                            {% if lead.status == 'new' %}<i class="bi bi-star-fill"></i> New
+                            {% elif lead.status == 'contacted' %}<i class="bi bi-chat-fill"></i> Contacted
+                            {% elif lead.status == 'progress' %}<i class="bi bi-hourglass-split"></i> In Progress
+                            {% elif lead.status == 'converted' %}<i class="bi bi-trophy-fill"></i> Converted
+                            {% else %}{{ lead.status }}{% endif %}
+                        </span>
+                    </td>
+                    <td onclick="event.stopPropagation()">
+                        <a href="{% url 'update_status' lead.id %}" class="action-btn status" title="Update Status">
+                            <i class="bi bi-arrow-repeat"></i>
+                        </a>
+                        <a href="{% url 'edit_lead' lead.id %}" class="action-btn edit" title="Edit">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                        <a href="{% url 'delete_lead' lead.id %}" class="action-btn delete" title="Delete"
+                           onclick="return confirm('Delete this lead?')">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6">
+                        <div class="empty-state">
+                            <i class="bi bi-inbox"></i>
+                            <p>No leads found. <a href="{% url 'contact' %}">Add your first lead →</a></p>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- PAGINATION -->
+        <div class="pagination-wrap">
+            <span class="page-info">
+                Page {{ leads.number }} of {{ leads.paginator.num_pages }}
+                &nbsp;·&nbsp; {{ leads.paginator.count }} total leads
+            </span>
+            <div class="d-flex gap-2">
+                {% if leads.has_previous %}
+                <a href="?page={{ leads.previous_page_number }}&status={{ status_filter }}&search={{ search_query }}"
+                   class="page-btn"><i class="bi bi-chevron-left"></i> Prev</a>
+                {% endif %}
+                {% if leads.has_next %}
+                <a href="?page={{ leads.next_page_number }}&status={{ status_filter }}&search={{ search_query }}"
+                   class="page-btn">Next <i class="bi bi-chevron-right"></i></a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- LEAD DETAIL MODAL -->
+<div class="modal fade" id="detailModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-bottom">
+                <h5 class="modal-title fw-bold">
+                    <i class="bi bi-person-circle me-2" style="color:#4f46e5"></i>
+                    Lead Details
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="detail-row"><div class="detail-label">👤 Name</div><div class="detail-value" id="d-name"></div></div>
+                <div class="detail-row"><div class="detail-label">📧 Email</div><div class="detail-value" id="d-email"></div></div>
+                <div class="detail-row"><div class="detail-label">📞 Phone</div><div class="detail-value" id="d-phone"></div></div>
+                <div class="detail-row"><div class="detail-label">🏢 Company</div><div class="detail-value" id="d-company"></div></div>
+                <div class="detail-row"><div class="detail-label">📌 Status</div><div class="detail-value" id="d-status"></div></div>
+                <div class="detail-row" style="border:none"><div class="detail-label">💬 Message</div><div class="detail-value" id="d-message"></div></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// Dark/Light Mode
+function toggleTheme() {
+    const html = document.documentElement;
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    document.getElementById('theme-icon').className = isDark ? 'bi bi-moon-fill' : 'bi bi-sun-fill';
+    localStorage.setItem('theme', isDark ? 'light' : 'dark');
+}
+// Load saved theme
+const saved = localStorage.getItem('theme');
+if (saved) {
+    document.documentElement.setAttribute('data-theme', saved);
+    document.getElementById('theme-icon').className = saved === 'dark' ? 'bi bi-sun-fill' : 'bi bi-moon-fill';
+}
+
+// Lead Detail Modal
+function showDetail(id, name, email, phone, company, message, status) {
+    document.getElementById('d-name').textContent    = name;
+    document.getElementById('d-email').textContent   = email;
+    document.getElementById('d-phone').textContent   = phone;
+    document.getElementById('d-company').textContent = company;
+    document.getElementById('d-status').textContent  = status;
+    document.getElementById('d-message').textContent = message || '—';
+    new bootstrap.Modal(document.getElementById('detailModal')).show();
+}
+
+// Export CSV
+function exportCSV() {
+    const rows = [['Name','Email','Phone','Company','Status']];
+    document.querySelectorAll('#leadsTable tbody tr.lead-row').forEach(tr => {
+        const cells = tr.querySelectorAll('td');
+        if (cells.length >= 5) {
+            rows.push([
+                cells[0].innerText.trim(),
+                cells[1].innerText.trim(),
+                cells[2].innerText.trim(),
+                cells[3].innerText.trim(),
+                cells[4].innerText.trim()
+            ]);
+        }
+    });
+    const csv = rows.map(r => r.map(c => `"${c}"`).join(',')).join('\n');
+    const a = document.createElement('a');
+    a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+    a.download = 'leads_export.csv';
+    a.click();
+}
+</script>
+</body>
+</html>

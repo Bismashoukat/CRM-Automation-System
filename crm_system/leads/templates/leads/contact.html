@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <title>Submit a Lead</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root[data-theme="light"] {
+            --bg: #f0f2f5;
+            --card: #ffffff;
+            --text: #1a1a2e;
+            --muted: #6c757d;
+            --border: #e0e0e0;
+            --input-bg: #f8f9ff;
+            --input-focus: #ffffff;
+        }
+        :root[data-theme="dark"] {
+            --bg: #0f0f1a;
+            --card: #1e1e2e;
+            --text: #e0e0f0;
+            --muted: #9090a0;
+            --border: #2e2e4e;
+            --input-bg: #252538;
+            --input-focus: #2e2e48;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; transition: background 0.3s, color 0.2s; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* TOPBAR */
+        .topbar {
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            padding: 14px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .brand {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #4f46e5;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .theme-btn {
+            width: 36px; height: 36px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--card);
+            color: var(--text);
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1rem;
+        }
+
+        /* LAYOUT */
+        .page-wrap {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 16px;
+        }
+
+        .form-card {
+            background: var(--card);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 520px;
+            overflow: hidden;
+        }
+
+        /* CARD HEADER */
+        .card-header {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            padding: 32px 36px;
+            color: white;
+        }
+        .card-header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .card-header p {
+            opacity: 0.85;
+            font-size: 0.9rem;
+        }
+
+        /* FORM BODY */
+        .card-body { padding: 32px 36px; }
+
+        .field-group {
+            margin-bottom: 18px;
+        }
+        .field-label {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 7px;
+        }
+        .field-wrap {
+            position: relative;
+        }
+        .field-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--muted);
+            font-size: 1rem;
+            pointer-events: none;
+        }
+        .field-icon.top { top: 18px; transform: none; }
+
+        input, textarea {
+            width: 100%;
+            background: var(--input-bg);
+            border: 1.5px solid var(--border);
+            color: var(--text);
+            border-radius: 10px;
+            padding: 11px 14px 11px 40px;
+            font-size: 0.92rem;
+            outline: none;
+            font-family: inherit;
+        }
+        input:focus, textarea:focus {
+            border-color: #4f46e5;
+            background: var(--input-focus);
+            box-shadow: 0 0 0 3px rgba(79,70,229,0.12);
+        }
+        textarea {
+            height: 110px;
+            resize: vertical;
+            padding-top: 12px;
+        }
+
+        /* ROW */
+        .field-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        /* SUBMIT */
+        .submit-btn {
+            width: 100%;
+            padding: 13px;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 6px;
+            letter-spacing: 0.3px;
+        }
+        .submit-btn:hover {
+            background: linear-gradient(135deg, #4338ca, #6d28d9);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(79,70,229,0.35);
+        }
+        .submit-btn:active { transform: none; }
+
+        /* BACK LINK */
+        .back-link {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+        .back-link a { color: #4f46e5; text-decoration: none; font-weight: 500; }
+        .back-link a:hover { text-decoration: underline; }
+
+        @media (max-width: 480px) {
+            .card-header, .card-body { padding: 24px 20px; }
+            .field-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+    <a href="{% url 'dashboard' %}" class="brand">
+        <i class="bi bi-diagram-3-fill"></i> CRM System
+    </a>
+    <button class="theme-btn" onclick="toggleTheme()">
+        <i class="bi bi-moon-fill" id="theme-icon"></i>
+    </button>
+</div>
+
+<!-- FORM -->
+<div class="page-wrap">
+    <div class="form-card">
+
+        <div class="card-header">
+            <h1>🤝 Submit a Lead</h1>
+            <p>Fill in the details below to add a new lead to your CRM pipeline.</p>
+        </div>
+
+        <div class="card-body">
+            <form method="POST">
+                {% csrf_token %}
+
+                <!-- Name + Phone row -->
+                <div class="field-row">
+                    <div class="field-group">
+                        <label class="field-label">Full Name</label>
+                        <div class="field-wrap">
+                            <i class="bi bi-person field-icon"></i>
+                            <input type="text" name="name" placeholder="Ali Ahmed" required>
+                        </div>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Phone</label>
+                        <div class="field-wrap">
+                            <i class="bi bi-telephone field-icon"></i>
+                            <input type="text" name="phone" placeholder="+92 300 0000000">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="field-group">
+                    <label class="field-label">Email Address</label>
+                    <div class="field-wrap">
+                        <i class="bi bi-envelope field-icon"></i>
+                        <input type="email" name="email" placeholder="ali@company.com" required>
+                    </div>
+                </div>
+
+                <!-- Company -->
+                <div class="field-group">
+                    <label class="field-label">Company Name</label>
+                    <div class="field-wrap">
+                        <i class="bi bi-building field-icon"></i>
+                        <input type="text" name="company" placeholder="Smart Agency">
+                    </div>
+                </div>
+
+                <!-- Message -->
+                <div class="field-group">
+                    <label class="field-label">Message</label>
+                    <div class="field-wrap">
+                        <i class="bi bi-chat-left-text field-icon top"></i>
+                        <textarea name="message" placeholder="Tell us about your project or requirements..."></textarea>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    <i class="bi bi-send-fill"></i> Submit Lead
+                </button>
+            </form>
+
+            <div class="back-link">
+                <a href="{% url 'dashboard' %}"><i class="bi bi-arrow-left"></i> Back to Dashboard</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+function toggleTheme() {
+    const html = document.documentElement;
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    document.getElementById('theme-icon').className = isDark ? 'bi bi-moon-fill' : 'bi bi-sun-fill';
+    localStorage.setItem('theme', isDark ? 'light' : 'dark');
+}
+const saved = localStorage.getItem('theme');
+if (saved) {
+    document.documentElement.setAttribute('data-theme', saved);
+    document.getElementById('theme-icon').className = saved === 'dark' ? 'bi bi-sun-fill' : 'bi bi-moon-fill';
+}
+</script>
+
+</body>
+</html>
