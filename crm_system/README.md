@@ -1,4 +1,4 @@
-# 🚀 CRM Automation System
+<img width="1599" height="801" alt="dashboard" src="https://github.com/user-attachments/assets/b0cec636-8506-4a67-9fb8-0ce3def7719d" /># 🚀 CRM Automation System
 
 > A full-stack CRM (Customer Relationship Management) system built with **Django + n8n + Gmail** — featuring automated lead notifications, pipeline tracking, and a modern dashboard.
 
@@ -131,13 +131,16 @@ http://localhost:5678/webhook-test/new-lead
 ## 📸 Screenshots
 
 ### Dashboard
-![Dashboard](https://via.placeholder.com/800x400?text=CRM+Dashboard)
+![Dashboard](<img width="1599" height="801" alt="dashboard" src="https://github.com/user-attachments/assets/3d980946-6b48-45c3-a0fe-8dc60e8239ea" />
+)
 
 ### Contact Form
-![Contact Form](https://via.placeholder.com/800x400?text=Contact+Form)
+![Contact Form](<img width="1590" height="857" alt="contact form" src="https://github.com/user-attachments/assets/340b436d-1047-450f-9ea6-32e8efe24446" />
+)
 
 ### Edit Lead
-![Edit Lead](https://via.placeholder.com/800x400?text=Edit+Lead)
+![Edit Lead](<img width="1595" height="851" alt="edit lead form" src="https://github.com/user-attachments/assets/2deff0c9-5e4e-4b18-8912-068616836388" />
+)
 
 ---
 
