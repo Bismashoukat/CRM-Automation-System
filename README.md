@@ -131,15 +131,18 @@ http://localhost:5678/webhook-test/new-lead
 ## 📸 Screenshots
 
 ### Dashboard
-![Dashboard](<img width="1599" height="801" alt="dashboard" src="https://github.com/user-attachments/assets/3d980946-6b48-45c3-a0fe-8dc60e8239ea" />
+![Dashboard](<img width="1599" height="801" alt="dashboard" src="https://github.com/user-attachments/assets/f1197375-d50e-4092-a4a8-63e3b935f564" />
+
 )
 
 ### Contact Form
-![Contact Form](<img width="1590" height="857" alt="contact form" src="https://github.com/user-attachments/assets/340b436d-1047-450f-9ea6-32e8efe24446" />
+![Contact Form](<img width="1590" height="857" alt="contact form" src="https://github.com/user-attachments/assets/ad046c4f-eea5-4bf1-a74f-bc4b5f7df108" />
+
 )
 
 ### Edit Lead
-![Edit Lead](<img width="1595" height="851" alt="edit lead form" src="https://github.com/user-attachments/assets/2deff0c9-5e4e-4b18-8912-068616836388" />
+![Edit Lead](<img width="1595" height="851" alt="edit lead form" src="https://github.com/user-attachments/assets/1cf54ba2-5a16-4ad3-9bd5-43ea2006edc5" />
+
 )
 
 ---
