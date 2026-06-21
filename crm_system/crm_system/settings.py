@@ -59,14 +59,18 @@ TEMPLATES = [
 WSGI_APPLICATION = 'crm_system.wsgi.application'
 
 
-# ✅ DATABASE
+import os
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'crm_database_2oxk',
+        'USER': 'crm_database_2oxk_user',
+        'PASSWORD': 'GFXbSjVEELqF7obKMdVUXkSO2cprBY7d',
+        'HOST': 'dpg-d8rksc7avr4c73enh2tg-a',
+        'PORT': '5432',
     }
 }
-
 
 # ✅ PASSWORD VALIDATION
 AUTH_PASSWORD_VALIDATORS = [
